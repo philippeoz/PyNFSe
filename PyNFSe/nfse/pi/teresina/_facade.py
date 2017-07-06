@@ -7,9 +7,10 @@ from PyNFSe.nfse.pi.teresina.comunicacao import Comunicacao
 class Facade:
 
     def __init__(self, certificado_pfx, senha, producao=False):
-        namespace = '{http://issteresina.teresina.pi.gov.br/iss/nfse.xsd}'
-        url_homologacao = 'https://pilotoissteresina.teresina.pr.gov.br/nfse_ws/NfseWs.asmx?WSDL'
-        url_producao = 'https://issteresina.teresina.pi.gov.br/Iss.NfseWebService/nfsews.asmx?WSDL'
+        namespace = '{http://www.issdigitalthe.com.br/WsNFe2/LoteRps.jws}'
+        url_homologacao = None
+        # url_producao = 'http://www.issdigitalthe.com.br/WsNFe2/LoteRps.jws?wsdl'
+        url_producao = 'http://www.issdigitalthe.com.br/WsNFe2/LoteRps.jws'
 
         cert, cert_file, key, key_file = c(certificado_pfx, senha)
         url_ambiente = url_producao if producao else url_homologacao
