@@ -27,9 +27,9 @@ if pyxb.__version__ != _PyXBVersion:
 _module_typeBindings = pyxb.utils.utility.Object()
 
 # Import bindings for namespaces imported into schema
-import _tipos as _ImportedBinding_tipos
+from . import _tipos as _ImportedBinding_tipos
 import pyxb.binding.datatypes
-import _ds as _ImportedBinding_ds
+from . import _ds as _ImportedBinding_ds
 
 # NOTE: All namespace declarations are reserved within the binding
 Namespace = pyxb.namespace.NamespaceForURI('http://localhost:8080/WsNFe2/lote', create_if_missing=True)

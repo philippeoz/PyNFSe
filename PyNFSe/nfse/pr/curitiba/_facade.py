@@ -1,5 +1,5 @@
 from PyNFSe.utils.certificado import certificado as c
-from PyNFSe.utils.assinatura import Assinatura
+from PyNFSe.utils.pr.curitiba.assinatura import Assinatura
 from PyNFSe.nfse.pr.curitiba import serializacao as s
 from PyNFSe.nfse.pr.curitiba.comunicacao import Comunicacao
 

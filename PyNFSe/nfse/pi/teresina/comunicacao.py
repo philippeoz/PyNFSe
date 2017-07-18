@@ -6,26 +6,26 @@ class Comunicacao:
     def __init__(self, url_ambiente, certificado, producao):
         self._cliente = ClienteComunicacao(url_ambiente, certificado, producao)
 
-    def validar_xml(self, xml):
-        return self._cliente.service.ValidarXml(xml)
+    def enviar_assincrono(self, xml):
+        return self._cliente.service.enviar(xml)
 
-    def consultar_nfse(self, xml):
-        return self._cliente.service.RecepcionarXml('ConsultarNfse', xml)
+    def enviar_sincrono(self, xml):
+        return self._cliente.service.enviarSincrono(xml)
 
-    def consultar_nfse_por_rps(self, xml):
-        return self._cliente.service.RecepcionarXml('ConsultarNfsePorRps', xml)
+    def teste_enviar(self, xml):
+        return self._cliente.service.testeEnviar(xml)
 
-    def consultar_situacao_lote_rps(self, xml):
-        return self._cliente.service.RecepcionarXml('ConsultarSituacaoLoteRps', xml)
+    def consultar_lote(self, xml):
+        return self._cliente.service.consultarLote(xml)
 
-    def consultar_lote_rps(self, xml):
-        return self._cliente.service.RecepcionarXml('ConsultarLoteRps', xml)
+    def consultar_nota(self, xml):
+        return self._cliente.service.consultarNota(xml)
 
-    def recepcionar_lote_rps(self, xml):
-        return self._cliente.service.RecepcionarXml('RecepcionarLoteRps', xml)
+    def consultar_sequencial_rps(self, xml):
+        return self._cliente.service.consultarSequencialRps(xml)
 
     def cancelar_nfse(self, xml):
-        return self._cliente.service.RecepcionarXml('CancelarNfse', xml)
+        return self._cliente.service.Cancelar(xml)
 
-    def recepcionar_xml(self, metodo, xml):
-        return self._cliente.service.RecepcionarXml(metodo, xml)
+    def consultar_nfse_rps(self, xml):
+        return self._cliente.service.consultarNFSeRps(xml)

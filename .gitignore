@@ -126,3 +126,4 @@ ENV/
 
 # Rope project settings
 .ropeproject
+tests/pi/teresina/certificado/*.pfx

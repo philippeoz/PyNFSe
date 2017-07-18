@@ -1,36 +1,15 @@
 from lxml import etree
-from signxml import XMLSigner, methods
+from PyNFSe.utils.assinatura_base import AssinaturaBase
 
 
-class Assinatura:
-
-    def __init__(self, certificado, chave, namespace):
-
-        self.cert = certificado
-        self.key = chave
-        self.NAMESPACE = namespace
-
-        self._assinador = XMLSigner(
-            method=methods.detached,
-            signature_algorithm="rsa-sha1",
-            digest_algorithm='sha1',
-            c14n_algorithm='http://www.w3.org/TR/2001/REC-xml-c14n-20010315'
-        )
+class Assinatura(AssinaturaBase):
 
     def assinar_lote_rps(self, xml_lote_rps):
 
         root = etree.fromstring(xml_lote_rps.encode())
-        lista_rps = root.findall('./{0}LoteRps/{0}ListaRps/*'.format(self.NAMESPACE))
 
-        for rps in lista_rps:
-            infrps = rps.find('{0}InfRps'.format(self.NAMESPACE))
-            reference_uri = infrps.attrib.get('id')
-            assinatura = self._assinatura_xml(rps, reference_uri)
-
-            rps.append(assinatura)
-
-        lote_rps = root.find('{0}LoteRps'.format(self.NAMESPACE))
-        reference_uri = lote_rps.attrib.get('id')
+        lote_rps = root.find('Lote')
+        reference_uri = "lote:{}".format(lote_rps.attrib.get('Id'))
         assinatura = self._assinatura_xml(root, reference_uri)
 
         root.append(assinatura)

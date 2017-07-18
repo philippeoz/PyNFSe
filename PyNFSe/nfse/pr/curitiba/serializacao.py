@@ -1,7 +1,7 @@
 from pyxb import BIND
 
 from PyNFSe.nfse.pr.curitiba import _schema as nfse_schema
-from PyNFSe.utils.entidades import Prestador, Tomador, Servico, RPS, LoteRPS, PedidoCancelamentoNFSe
+from PyNFSe.utils.pr.curitiba.entidades import Prestador, Tomador, Servico, RPS, LoteRPS, PedidoCancelamentoNFSe
 
 
 def consulta_nfse_por_numero(prestador, numero_nfse):
