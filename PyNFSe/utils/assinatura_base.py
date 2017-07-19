@@ -10,7 +10,7 @@ class AssinaturaBase:
         self.NAMESPACE = namespace
 
         self._assinador = XMLSigner(
-            method=methods.detached,
+            method=methods.enveloped,
             signature_algorithm="rsa-sha1",
             digest_algorithm='sha1',
             c14n_algorithm='http://www.w3.org/TR/2001/REC-xml-c14n-20010315'

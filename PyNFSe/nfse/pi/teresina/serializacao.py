@@ -29,26 +29,14 @@ def enviar_assincrono(dict_cabecalho, dict_lote_rps):
         raise KeyObrigatoriaError(err)
 
     envio.Lote = BIND()
-
     lote_rps = LoteRPS(**dict_lote_rps)
-
     envio.Lote.Id = lote_rps.id
-
+    
     for rps in lote_rps.lista_rps:
         envio.Lote.append(_serial_rps(rps))
     
     xml = envio.toxml()
-
-    xml = write_attr_string(xml, 'ReqEnvioLoteRPS', 'xmlns:xsi', 
-        'http://www.w3.org/2001/XMLSchema-instance')
-    
-    xml = write_attr_string(xml, 'ReqEnvioLoteRPS', 'xsi:schemaLocation', 
-        'http://localhost:8080/WsNFe2/lote '+
-        'http://localhost:8080/WsNFe2/xsd/ReqEnvioLoteRPS.xsd')
-    
-    xml = write_attr_string(xml, 'ReqEnvioLoteRPS', 'xmlns:tipos', 
-        'http://localhost:8080/WsNFe2/tp')
-    
+    xml = _set_attrs(xml, 'ReqEnvioLoteRPS')
     xml = _clean_xml(xml)
 
     return xml
@@ -67,14 +55,30 @@ def consultar_lote(dict_cabecalho):
         raise KeyObrigatoriaError(err)
 
     xml = consulta.toxml()
-    
-    xml = write_attr_string(xml, 'ReqConsultaLote', 'xsi:schemaLocation', 
-    'http://localhost:8080/WsNFe2/lote '+
-    'http://localhost:8080/WsNFe2/xsd/ReqConsultaLote.xsd')
+    xml = _set_attrs(xml, 'ReqConsultaLote')
+    xml = _clean_xml(xml)
+    return xml
 
-    xml = write_attr_string(xml, 'ReqConsultaLote', 'xmlns:tipos', 
-        'http://localhost:8080/WsNFe2/tp')
 
+def consultar_nota(dict_cabecalho):
+    consulta = nfse_schema.ReqConsultaNotas()
+    consulta.Cabecalho = BIND()
+
+    consulta.Cabecalho.Id = 'Consulta:notas'
+    consulta.Cabecalho.Versao = 1
+
+    try:
+        consulta.Cabecalho.CodCidade = dict_cabecalho['cod_cidade']
+        consulta.Cabecalho.CPFCNPJRemetente = dict_cabecalho['cpf_cnpj_remetente']
+        consulta.Cabecalho.InscricaoMunicipalPrestador = dict_cabecalho['inscricao_municipal_prestador']
+        consulta.Cabecalho.dtInicio = parse_date(dict_cabecalho['dt_inicio'])
+        consulta.Cabecalho.dtFim = parse_date(dict_cabecalho['dt_fim'])
+        consulta.Cabecalho.NotaInicial = dict_cabecalho['nota_inicial']
+    except KeyError as err:
+        raise KeyObrigatoriaError(err)
+
+    xml = consulta.toxml()
+    xml = _set_attrs(xml, 'ReqConsultaNotas')
     xml = _clean_xml(xml)
     return xml
 
@@ -206,6 +210,20 @@ def write_attr_string(xml, elem, attr, value):
             elem, attr, value
         )
     )
+
+
+def _set_attrs(xml, req):
+    xml = write_attr_string(xml, req, 'xsi:schemaLocation', 
+        'http://localhost:8080/WsNFe2/lote '+
+        'http://localhost:8080/WsNFe2/xsd/{}.xsd'.format(req))
+
+    xml = write_attr_string(xml, req, 'xmlns:xsi', 
+        'http://www.w3.org/2001/XMLSchema-instance')
+    
+    xml = write_attr_string(xml, req, 'xmlns:tipos', 
+        'http://localhost:8080/WsNFe2/tp')
+
+    return xml
 
 
 def _clean_xml(xml):

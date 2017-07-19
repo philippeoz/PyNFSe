@@ -9,10 +9,8 @@ class Assinatura(AssinaturaBase):
         root = etree.fromstring(xml_lote_rps.encode())
 
         lote_rps = root.find('Lote')
-        reference_uri = "lote:{}".format(lote_rps.attrib.get('Id'))
-        assinatura = self._assinatura_xml(root, reference_uri)
-
-        root.append(assinatura)
+        reference_uri = "{}".format(lote_rps.attrib.get('Id'))
+        root = self._assinatura_xml(root, reference_uri)
 
         xml_lote_rps_assinado = etree.tostring(root, encoding='utf-8').decode()
 
@@ -20,22 +18,18 @@ class Assinatura(AssinaturaBase):
 
         return xml_lote_rps_assinado
 
-    def assinar_cancelamento_nfse(self, xml_cancelamento_nfse):
+    def assinar_consulta_nota(self, xml_consulta_nota):
 
-        root = etree.fromstring(xml_cancelamento_nfse.encode())
-        pedido = root.find('{0}Pedido'.format(self.NAMESPACE))
-        inf_pedido = pedido.find('{0}InfPedidoCancelamento'.format(self.NAMESPACE))
-        reference_uri = inf_pedido.attrib.get('id')
+        root = etree.fromstring(xml_consulta_nota.encode())
 
-        assinatura = self._assinatura_xml(pedido, reference_uri)
+        consulta_nota = root.find('Cabecalho')
+        reference_uri = "{}".format(consulta_nota.attrib.get('Id'))
+        root = self._assinatura_xml(root, reference_uri)
 
-        pedido.append(assinatura)
-
-        xml_pedido_cancelamento_assinado = etree.tostring(root, encoding='utf-8').decode()
-
-        xml_pedido_cancelamento_assinado = xml_pedido_cancelamento_assinado.replace('ds:', '').replace(':ds', '')
-
-        return xml_pedido_cancelamento_assinado
+        xml_consulta_nota_assinado = etree.tostring(root, encoding='utf-8').decode()
+        xml_consulta_nota_assinado = xml_consulta_nota_assinado.replace('ds:', '').replace(':ds', '')
+        
+        return xml_consulta_nota_assinado
 
     def _assinatura_xml(self, data, reference_uri):
 
