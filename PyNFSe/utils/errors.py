@@ -49,12 +49,11 @@ class CampoObrigatorioError(PyNFSeError):
 
 
 class KeyObrigatoriaError(PyNFSeError):
-    def __init__(self, key, dic):
+    def __init__(self, key):
         self.key = key
-        self.dic = dic
         super(KeyObrigatoriaError, self).__init__()
 
     def __str__(self):
-        return 'O envio de "{}" é obrigatório neste método.'.format(
+        return 'O envio de {} é obrigatório neste método.'.format(
             self.key
         )

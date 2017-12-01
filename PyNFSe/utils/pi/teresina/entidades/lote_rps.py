@@ -17,3 +17,11 @@ class LoteRPS(Entidade):
     @id.setter
     def id(self, value):
         self._id = "lote:{}".format(value)
+
+    @property
+    def lista_nfse(self):
+        return self.lista_rps
+
+    @lista_nfse.setter
+    def lista_nfse(self, value)
+        self.lista_rps = value

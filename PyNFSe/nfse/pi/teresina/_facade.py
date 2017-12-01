@@ -20,12 +20,12 @@ class Facade:
 
     def enviar_assincrono(self, dict_cabecalho, dict_lote_rps):
         xml = serializacao.enviar_assincrono(dict_cabecalho, dict_lote_rps)
-        xml = self._assinador.assinar_lote_rps(xml)
+        xml = self._assinador.assinar_xml(xml, 'Lote')
         return self._servicos_wsdl.enviar_assincrono(xml)
 
     def teste_enviar(self, dict_cabecalho, dict_lote_rps):
         xml = serializacao.enviar_assincrono(dict_cabecalho, dict_lote_rps)
-        xml = self._assinador.assinar_lote_rps(xml)
+        xml = self._assinador.assinar_xml(xml,  'Lote')
         return self._servicos_wsdl.teste_enviar(xml)
 
     def consultar_lote(self, dict_consulta_lote):
@@ -34,14 +34,16 @@ class Facade:
 
     def consultar_nota(self, dict_consulta_notas):
         xml = serializacao.consultar_nota(dict_consulta_notas)
-        xml = self._assinador.assinar_consulta_nota(xml)
+        xml = self._assinador.assinar_xml(xml,  'Cabecalho')
         return self._servicos_wsdl.consultar_nota(xml)
 
     def consultar_sequencial_rps(self, dict_consulta_seq_rps):
-        # xml = serializacao.consultar_sequencial_rps(dict_consulta_seq_rps)
-        pass
+        xml = serializacao.consultar_sequencial_rps(dict_consulta_seq_rps)
+        return self._servicos_wsdl.consultar_sequencial_rps(xml)
 
-    def write_xml(self, xml):
-        with open('/home/philippeoz/Desktop/teste.xml', 'w') as f:
-            f.write(xml)
-            f.close()
+    def cancelar_nfse(self, dict_cabecalho, dict_lote_nfse):
+        xml = serializacao.cancelar_nfse(dict_cancela)
+        xml = self._assinador.assinar_xml(xml, 'Lote')
+        return self._servicos_wsdl.cancelar_nfse(xml)
+
+    def consultar_nfse_rps()

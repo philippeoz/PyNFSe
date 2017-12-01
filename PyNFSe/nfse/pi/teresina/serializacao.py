@@ -82,6 +82,61 @@ def consultar_nota(dict_cabecalho):
     xml = _clean_xml(xml)
     return xml
 
+def consultar_sequencial_rps(dict_cabecalho):
+    consulta = nfse_schema.ConsultaSeqRps()
+    consulta.Cabecalho = BIND()
+
+    consulta.Cabecalho.Versao = 1
+
+    try:
+        consulta.Cabecalho.CodCid = dict_cabecalho['cod_cidade']
+        consulta.Cabecalho.IMPrestador = dict_cabecalho['inscricao_municipal_prestador']
+        consulta.Cabecalho.CPFCNPJRemetente = dict_cabecalho['cpf_cnpj_remetente']
+        consulta.Cabecalho.SeriePrestacao = dict_cabecalho['serie_prestacao']
+    except KeyError as err:
+        raise KeyObrigatoriaError(err)
+
+    xml = consulta.toxml()
+    xml = _set_attrs(xml, 'ConsultaSeqRps')
+    xml = _clean_xml(xml)
+    return xml
+
+def cancelar_nfse(dict_cabecalho, dict_lote_nfse):
+    cancelamento = nfse_schema.ReqCancelamentoNFSe()
+    cancelamento.Cabecalho = BIND()
+
+    cancelamento.Cabecalho.Versao = 1
+    cancelamento.Cabecalho.transacao = 'true'
+
+    try:
+        cancelamento.Cabecalho.CodCidade = dict_cabecalho['cod_cidade']
+        cancelamento.Cabecalho.CPFCNPJRemetente = dict_cabecalho['cpf_cnpj_remetente']
+    except KeyError as err:
+        raise KeyObrigatoriaError(err)
+
+    envio.Lote = BIND()
+    lote_nfse = LoteRPS(**dict_lote_nfse)
+    envio.Lote.Id = lote_nfse.id
+    
+    for nfse in lote_nfse.lista_nfse:
+        envio.Lote.append(_serial_nfse_cancelamento(nfse))
+
+    xml = consulta.toxml()
+    xml = _set_attrs(xml, 'ConsultaSeqRps')
+    xml = _clean_xml(xml)
+    return xml
+
+def _serial_nfse_cancelamento(dict_nfse):
+    nfse = nfse_tipos.tpNotaCancelamentoNFSe()
+    try:
+        nfse.Id = dict_nfse['id']
+        nfse.InscricaoMunicipalPrestador = dict_nfse['inscricao_municipal_prestador']
+        nfse.NumeroNota = dict_nfse['numero_nota']
+        nfse.CodigoVerificacao = dict_nfse['codigo_verificacao']
+        nfse.MotivoCancelamento = dict_nfse['motivo_cancelamento']
+    except KeyError as err:
+        raise KeyObrigatoriaError(err)
+    return nfse
 
 def _serial_item(item_rps):
     inf_item = nfse_tipos.tpItens()
